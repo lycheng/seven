@@ -200,8 +200,26 @@ function deleteCells(fromX, fromY, toX, toY) {
 	}
 }
 
-function addCell(x, y) {
-	var index = parseInt(Math.random() * (NUM_OF_COLORS) + 1);
+function getNextOnes() {
+    for ( var i = 0; i < level; i++ ) {
+        var index = parseInt(Math.random() * (NUM_OF_COLORS) + 1);
+        nextOnes[i] = index;
+    }
+}
+
+function drawGameInfo() {
+    for ( var i = 0; i < level; ++i ) {
+        fillRect( 1 + NUM + i, 1, colors[ nextOnes[i] ] );
+    }
+    var ctx = getCtx();
+    ctx.fillStyle = WHITE;
+	ctx.fillRect((cell + gap) * (NUM + 1) , (cell + gap) * 3 + 10, cell * 7, cell);
+    ctx.font = '22px';
+    ctx.fillStyle = BLACK;
+    ctx.fillText(score, (cell + gap) * (NUM + 1) + 10 , (gap + cell) * 4 );
+}
+
+function addCell(x, y, index) {
 	deleteFromEmpty( x, y );
 	fillRect(x, y, colors[index]);
 	map[x][y] = index;
@@ -214,9 +232,10 @@ function addCells() {
 			alert( "You Lose!" );
 			return ;
 		}
-		var index = parseInt(Math.random() * (map_empty.length - 1));	
+		var index = nextOnes[i];
 		var x = parseInt( map_empty[index][0] );
 		var y = parseInt( map_empty[index][1] );
-		addCell( x, y );
+		addCell( x, y, index );
 	}
+    getNextOnes();
 }

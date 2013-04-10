@@ -23,6 +23,14 @@ var gap   = 4;
 // for game
 var level = 3;
 
+// next ones
+var textForNext = "Next";
+var nextOnes = new Array();
+
+// score
+var textForScore = "Score";
+var score = 0;
+
 var map = new Array();
 var map_empty = new Array();
 var map_search = new Array();

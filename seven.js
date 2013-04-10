@@ -6,20 +6,28 @@ function init() {
 				fillRect(i, j, GRAY);
 			}
 		}
+        getNextOnes();
 		// init with three color cells
-		for (var k = 0; k < 3; ++k) {
+		for (var k = 0; k < level; ++k) {
 			while (1) {
 				var x = parseInt(Math.random() * (NUM - 1));
 				var y = parseInt(Math.random() * (NUM - 1));
 				if (map[x][y] == 0) {
-					addCell( x, y );
+					addCell( x, y, nextOnes[k] );
 					break;
 				}
 			}
-		}
+		}    
+        var ctx = getCtx();
+        ctx.fillStyle = BLACK; 
+        ctx.font = '20px arial,sans-serif';
+        ctx.fillText(textForNext, (cell + gap) * (NUM + 1) + 10, gap + cell);
+        ctx.fillStyle = BLACK; 
+        ctx.fillText(textForScore, (cell + gap) * (NUM + 1) + 10 , (gap + cell) * 3 );
+        drawGameInfo();
 	}
 	else {
-		alert("Chrome!OR Firefox!OR any other Browser except IE!");
+		alert("Chrome!OR Firefox!OR any other browser Support canvas");
 	}
 }
 
@@ -28,7 +36,6 @@ function play(event) {
 	var y = parseInt((event.y - start) / (gap + cell));
 
 	drawFlag(WHITE);
-
 	if (x < 0 || x > NUM - 1 || y < 0 || y > NUM - 1) {
 		if ( -1 != selectedX ) {
 			drawLine( selectedX, selectedY, WHITE );
@@ -69,9 +76,14 @@ function play(event) {
 				setSelected( -1, -1 );
 
 				// add some new ones
-				if (clearCompleted(x, y) == 1) {
+                var re = clearCompleted(x, y);
+				if (re == 1) {
 					addCells();
 				}
+                else {
+                    score += re;
+                }
+                drawGameInfo();
 			}
 			initSearch();
 		}
